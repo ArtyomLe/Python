@@ -269,41 +269,94 @@ True
 
 
 ============= Поиск любого текста с помощью .* =========================================
+        Поиск соответствия произвольному тексту
+
+>>> import re
+>>> nameRegex = re.compile(r'Name: (.*) Second Name: (.*)')
+>>> mo = nameRegex.search('Name: Artyom Second Name: Levykh')
+>>> mo.group(1)
+'Artyom'
+>>> mo.group(2)
+'Levykh'
+>>> mo.group()
+'Name: Artyom Second Name: Levykh'
+
+
+Жадный\Не жадный режимы
+
+>>> nongreedyRegex = re.compile(r'<.*?>')
+>>> mo = nongreedyRegex.search('<Make dinner> to husband.>')
+>>> mo.group()
+'<Make dinner>'
+>>> nongreedyRegex = re.compile(r'<.*>')
+>>> mo = nongreedyRegex.search('<Make dinner> to husband.>')
+>>> mo.group()
+'<Make dinner> to husband.>'
 
 
 
+============= Поиск символов новой строки с помощью (.) Точки =============================
+
+>>> noNewlineRegex = re.compile('.*')
+>>> noNewlineRegex.search('Sex.\nDrugs.\nRocknRoll.').group()  # \n Новая строка
+'Sex.'
+
+>>> newlineRegex = re.compile('.*', re.DOTALL)
+>>> newlineRegex.search('Sex.\nDrugs.\nRocknRoll.').group()
+'Sex.\nDrugs.\nRocknRoll.'
 
 
 
+============= Поиск без учёта регистра re.I ======================================
+        Когда интересен сам факт совпадения букв re.IGNORECASE
+
+
+>>> robocop = re.compile(r'робокоп', re.I)
+>>> robocop.search('РобоКоп - это частично машина.').group()
+'РобоКоп'
+>>> robocop.search('РОБОКОП - protects people.').group()
+'РОБОКОП'
+>>> robocop.search('Its all about робокоп.').group()
+'робокоп'
 
 
 
+============= Замена строк с помощью метода sub() ==============================
+
+Первый аргумент - это строка которая должна подставлятся вместо найденных совпадений
+Второй аргумент - строка в которой выполняется поиск регулярного выражения
+
+Метод возвращает строку в которой выполнены замены
+
+>>> namesRegex = re.compile(r'агент \w+', re.I) # агент \w+ => все буквы слова следующего после слова агент  # re.I => Поиск без учёта регистра
+>>> namesRegex.sub('ЦЕНЗУРА','Агент Алиса передала секретные документы. Агент Боб.')
+'ЦЕНЗУРА передала секретные документы. ЦЕНЗУРА.'
 
 
+>>> agentNamesRegex = re.compile(r'агент (\w)\w*', re.I)
+>>> agentNamesRegex.sub(r'\1****', 'Агент Алиса передала, что агент Ева знает: что агент Боб - двойной агент.')
+'А**** передала, что Е**** знает: что Б**** - двойной агент.'
 
 
+========== Игнорировать пробелы и комментарии в строке регулярного выражения ====
+Метод re.VERBOSE
+
+>>> phoneRegex = re.compile(r'''(
+        (\d{3}|\(\d{3}\))?              # Код региона
+        (\s|-|\.)?                      # Разделитель
+        \d{3}                           # Первые 3 цифры
+        (\s|-|\.)                       # Разделитель
+        \d{4}                           # Последние 4 цифры
+        (\s*(ext|x|ext.)\s*\d{2, 5})?   # Добавочный номер
+        )''', re.VERBOSE)
+
+>>> phoneRegex.search('Найди три 123-3545 цифры').group()
+' 123-3545'
 
 
+====== Комбинация констант re.I | re.VERBOSE | re.DOTALL =======================
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+someRegexValue = re.compile('foo', re.I | re.DOTALL | re.VERBOSE)
 
 
 
