@@ -192,9 +192,53 @@ invalid literal for int() with base 10: 'h'
 >>> response
 55
 
+========= Занять дурака =========================================================
+
+import pyinputplus as pyip
+
+while True:
+    prompt = 'Хотите узнать, как занять дурака на несколько часов?'
+    response = pyip.inputYesNo(prompt)
+#   response = pyip.inputYesNo(prompt, yesVal = 'да', noVal='нет') #Поддержка других языков
+#   if response == 'нет':
+    if response == 'no':
+        break
+    
+print('Спасибо! Желаю хорошего дня.')
 
 
+========= Тест на умножение ====================================================
 
+import pyinputplus as pyip
+import time, random
+
+numberOfQuestions = 10
+correctAnswers = 0
+
+for questionNumber in range(numberOfQuestions):
+    # Выбираем два случайных числа для перемножения
+    num1 = random.randint(0, 9)
+    num2 = random.randint(0, 9)
+    prompt = '#%s: %s x %s = ' %(questionNumber, num1, num2)
+
+    try:
+        # Правильные ответы задаются allowRegexes
+        # Неправильные ответы задаются blockRegexes
+        # В случае неправильного ответа отображается пользовательсткое сообщение
+        pyip.inputStr(prompt, allowRegexes=['^%s$' % (num1*num2)], \
+                      blockRegexes=[('.*', 'Неправильно!')], \
+                      timeout=8, limit=3)
+    except pyip.TimeoutException:
+        print('Время истекло!')
+    except pyip.RetryLimitException:
+        print('Кол-во попыток закончилось!')
+    else:
+        # Если в блоке try не возникло исключений
+        print('Правильно!')
+        correctAnswers += 1
+
+    time.sleep(1)
+print('Счёт: %s/%s'%(correctAnswers, numberOfQuestions))
 
 
 
