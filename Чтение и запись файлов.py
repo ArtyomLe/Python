@@ -96,6 +96,77 @@ True
 >>> Path('delicious/walnut').is_absolute()
 False                                                                          
                                                                           
+Получение абсолютного пути на основе относительного (на основе текущего каталога Path.cwd())
+
+>>> from pathlib import Path
+>>> Path('my/relative/path')
+WindowsPath('my/relative/path')
+>>> Path.cwd()/Path('my/relative/path')
+WindowsPath('C:/Users/ArtyomLe/Downloads/Python-main/Python-main/my/relative/path')
+
+Получение абсолютного пути на основе относительного (на основе домашнего каталога Path.hame())
+
+>>> Path('my/relative/path')
+WindowsPath('my/relative/path')
+>>> Path.home()/Path('my/relative/path')
+WindowsPath('C:/Users/ArtyomLe/my/relative/path')
+
+
+Модуль os.path()
+
+>>> import os
+>>> os.path.abspath('.')
+'C:\\Users\\ArtyomLe\\AppData\\Local\\Programs\\Python\\Python39'
+>>> os.path.abspath('.\Scripts')
+'C:\\Users\\ArtyomLe\\AppData\\Local\\Programs\\Python\\Python39\\Scripts'
+
+>>> os.path.isabs('.')
+False
+>>> os.path.isabs(os.path.abspath('.'))
+True
+
+>>> os.path.relpath('C:\\Windows', 'C:\\')
+'Windows'
+>>> os.path.relpath('C:\\Windows', 'C:\\spam\\eggs')
+'..\\..\\Windows'
+
+
+=========== Получение отдельных частей пути =====================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                          
+                                                                          
+
+
+
+
+
+
+
+
 
 
 
