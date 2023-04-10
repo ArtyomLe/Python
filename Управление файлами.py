@@ -106,22 +106,50 @@ for folderName, subfolders, filenames in os.walk('C:\\delicious'):
 ФАЙЛ В ПАПКЕ C:\delicious\walnut\waffles: butter.txt
 
 
-======== Сжатие и чтение zip файлов с помощью модуля zipfile ===============
+======== Чтение zip файлов с помощью модуля zipfile ===============
 
  cats
  |_catnames.txt
  |_zophie.jpg
- spam.txt
+ |_spam.txt
   
   
+>>> import zipfile, os
+>>> from pathlib import Path
+>>> p = Path.home()
+>>> exampleZip = zipfile.ZipFile(p / 'example.zip')
+>>> exampleZip.namelist() # метод namelist возвращает список файлов содерж. в ZIP архиве
+['cats/', 'cats/catnames.txt', 'cats/spam.txt', 'cats/zophie.jpg']
+>>> spamInfo = exampleZip.getinfo('cats/spam.txt')
+>>> spamInfo.file_size
+240             
+>>> spamInfo.compress_size
+240
+>>> f'Сжатый файл в {round(spamInfo.file_size / spamInfo.compress_size, 2)} раза меньше!'
+'Сжатый файл в 1.0 раза меньше!'
+>>> exampleZip.close()
 
 
+========= Извлечение файлов из архива extractall() ==================
 
+>>> import zipfile, os
+>>> from pathlib import Path
+>>> p = Path.home()
+>>> exampleZip = zipfile.ZipFile(p / 'example.zip')
+>>> exampleZip.extractall()
+# exampleZip.extractall('C:\\delicious\\walnut') # Для извлечения в другой каталог
+>>> exampleZip.close()
 
+Извлечение одиночного файла
+>>> exampleZip.extract('example/cats/spam.txt')
+'C:\\Python39\\example\\cats\\spam.txt'
 
+>>> exampleZip.extract('example/cats/spam.txt', 'C:\\some\\new\\folders')
+'C:\\some\\new\\folders\\example\\cats\\spam.txt'
 
+========= Создание zip архивов и добавление в них файлов ==================
 
-
-
-
-
+>>> import zipfile
+>>> newZip = zipfile.ZipFile('Linux.zip', 'w')       # 'a' - для добаления уже существующего
+>>> newZip.write('LinuxBooks/Linux Essentials for Hackers and Pentesters. Kali Linux Basics...2023.pdf', compress_type=zipfile.ZIP_DEFLATED) # В данном случае эта папка находится там откуда запускался питон
+>>> newZip.close()
