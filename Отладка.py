@@ -83,15 +83,35 @@ AssertionError
 
 ======== Использование утверждений в программе имитирующей работу светофора ========
 
+# Перекрёсток 4 улиц: Market, 2nd, Mission, 16th
+# 'ns' - north/south
+# 'ew' - east/west
+
+market_2nd   = {'ns': 'green', 'ew': 'red'}  # Словарь ключ/значение
+mission_16th = {'ns': 'red', 'ew': 'green'}
+
+def switchLights(stoplight):
+    for key in stoplight.keys():        # Перебирает ключи
+        if stoplight[key] == 'green':
+            stoplight[key] = 'yellow'
+        elif stoplight[key] == 'yellow':
+            stoplight[key] = 'red'
+        elif stoplight[key] == 'red':
+            stoplight[key] = 'green'
+
+#В любой момент времени по крайней мере один сигнал сфетофора красный
+assert 'red' in stoplight.values(), 'Ни один из сигналов не является красным!' + str(stoplight)
+
+switchLights(market_2nd)
 
 
+Полученный результат при отладке:
+    AssertionError: Ни один из сигналов не является красным!
+        {'ns': 'yellow', 'ew': 'green'}
 
 
-
-
-
-
-
+======== ПРОТОКОЛИРОВАНИЕ (Использование модуля logging)  ========
+        
 
 
 
