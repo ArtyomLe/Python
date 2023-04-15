@@ -108,18 +108,100 @@ switchLights(market_2nd)
 Полученный результат при отладке:
     AssertionError: Ни один из сигналов не является красным!
         {'ns': 'yellow', 'ew': 'green'}
+__________________________________________________________________
 
 
 ======== ПРОТОКОЛИРОВАНИЕ (Использование модуля logging)  ========
         
+С помощью журнальных сообщений можно увидеть что происходит в цикле
+
+#! python3
+# factorialLog.py
+
+import logging
+# logging.disable(logging.CRITICAL) # Отключение отладки(преимущество перед print())
+
+logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s')
+logging.debug('Начало программы')
+
+def factorial(n):
+    logging.debug('Начало factorial(%s%%)'% (n))
+    total = 1
+    for i in range(1, n + 1):        # Начинаем с единицы
+        total *= i
+        logging.debug('i = ' + str(i) +', total = ' + str(total))
+    logging.debug('Конец factorial(%s%%)'% (n))
+    return total
+
+print(factorial(5))
+logging.debug('Конец программы')
+
+Вывод:
+    
+ 2023-04-15 15:15:05,423 - DEBUG - Начало программы
+ 2023-04-15 15:15:05,435 - DEBUG - Начало factorial(5)
+ 2023-04-15 15:15:05,437 - DEBUG - i = 1, total = 1
+ 2023-04-15 15:15:05,440 - DEBUG - i = 2, total = 2
+ 2023-04-15 15:15:05,442 - DEBUG - i = 3, total = 6
+ 2023-04-15 15:15:05,444 - DEBUG - i = 4, total = 24
+ 2023-04-15 15:15:05,446 - DEBUG - i = 5, total = 120
+ 2023-04-15 15:15:05,449 - DEBUG - Конец factorial(5)
+120
+ 2023-04-15 15:15:05,455 - DEBUG - Конец программы
 
 
 
+======== Уровни протоколирования ======================================
+
+Уровень    Функция              Описание
+-----------------------------------------------------------------------
+DEBUG      logging.debug()      Низкий уровень. Диагностика проблем
+
+INFO       logging.info()       Запись информации об обычных событиях
+                                
+WARNING    loggigng.warning()   Индикация потенциально опасных ситуаций
+
+ERROR      logging.error()      Запись информации об ошибке
+
+CRITICAL   logging.critical()   Высокий уровень для фатальных ошибок
+
+>>> import logging
+>>> logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s')
+>>> logging.debug('Отладочная информация.')
+2023-04-15 16:14:57,856 - DEBUG - Отладочная информация.
+>>> logging.info('Работает модуль logging.')
+2023-04-15 16:16:17,716 - INFO - Работает модуль logging.
+>>> logging.warning('Риск получения сообщения об ошибке.')
+2023-04-15 16:17:29,892 - WARNING - Риск получения сообщения об ошибке.
+>>> logging.error('Произошла ошибка.')
+2023-04-15 16:17:59,247 - ERROR - Произошла ошибка.
+>>> logging.critical('Программа не может выполнятся.')
+2023-04-15 16:18:53,092 - CRITICAL - Программа не может выполнятся.
 
 
+Если передать функции аргумент (ERROR) level=logging.ERROR
+отображаться будут лишь сообщения категорий ERROR и CRITICAL
+
+Если передать функции аргумент (DEBUG) level=logging.DEBUG
+отображаться будут сообщения всех категорий.(низкий уровень)
 
 
+======== Отключение протоколирования ========================================
+
+>>> import logging
+>>> logging.basicConfig(level=logging.INFO, format=' %(asctime)s - %(levelname)s - %(message)s')
+>>> logging.critical('Критическая ошибка!')
+ 2023-04-15 16:30:59,157 - CRITICAL - Критическая ошибка!
+>>> logging.disable(logging.CRITICAL)        # <============ Отключение протоколирования
+>>> logging.critical('Критическая ошибка!')
+>>> logging.error('Ошибка!')
+>>> logging.warning('Предупреждение об ошибке!')
 
 
+======== Запись сообщений в журнал файла ====================================
+
+>>> import logging
+>>> logging.basicConfig(filename='myProgramLog.txt', level=logging.DEBUG, \
+		    format='%(asctime)s - %(levelname)s - %(message)s')
 
 
