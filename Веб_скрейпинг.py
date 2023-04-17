@@ -61,10 +61,14 @@ True
 >>> len(res.text)
 178978
 >>> print(res.text[:250])
-The Project Gutenberg EBook of Romeo and Juliet, by William Shakespeare
-
-This eBook is for the use of anyone anywhere at no cost and with
-almost no restrictions whatsoever.  You may copy it, give it away or
+The Project Gutenberg EBook of Romeo and Juliet, by William Shakespeare
+
+
+
+This eBook is for the use of anyone anywhere at no cost and with
+
+almost no restrictions whatsoever.  You may copy it, give it away or
+
 re-use it under the terms of the Projec
 
 
@@ -103,7 +107,7 @@ except Exception as exc:
 
 >>> import requests
 >>> res = requests.get('https://automatetheboringstuff.com/files/rj.txt')
->>> res.raise_for_status()                # Проверяем была ли загрузка успешной
+>>> res.raise_for_status()  # Проверяем была ли загрузка успешной
 >>> playFile = open('RomeAndJuliet.txt', 'wb') # wb - write binar (for unicode)
 >>> for chunk in res.iter_content(100000):     # Указываем размер фрагмента в байтах
 	playFile.write(chunk)
@@ -123,7 +127,92 @@ except Exception as exc:
 5) Вызов метода close() для закрытия файла
 
 
-================= HTML ==============================================================
+================= HTML (парсинг разметки с помощью модуля bs4) =======================
+
+pip install --user beautifulsoup4
+pip install --user lxml
+>>> import requests, bs4
+>>> res = requests.get('https://nostarch.com')
+>>> res.raise_for_status()
+>>> noStarchSoup = bs4.BeautifulSoup(res.text, 'html.parser')
+>>> type(noStarchSoup)
+<class 'bs4.BeautifulSoup'>
+
+
+Загрузка HTML файла с жёсткого диска(файл должен находиться в том же каталоге откуда запущен пайтон)
+
+>>> import bs4, lxml(как вариант парсера)
+>>> exampleFile = open('example.html')
+>>> exampleSoup = bs4.BeautifulSoup(exampleFile, 'html.parser') # или 'lxml' парсер второго аргумента
+>>> type(exampleSoup)
+<class 'bs4.BeautifulSoup'>
+
+
+
+================= Поиск элемента с помощью метода select() ===============
+
+Из обьекта BeautifulSoup, можно вызвать метод select() и передать ему строку CSS-селектора искомого элемента
+CSS-селекторы как регулярные выражения только в HTML страницах
+
+soup.select('div')
+soup.select('#author') Элемент, атрибут id которого равен "author"
+soup.select('.notice')
+soup.select('div span')
+soup.select('div>span')
+soup.select('input[name]')
+soup.select('input[type="button"]')
+
+
+Извлечение элемента с идентификатором 'author' из файла example.html
+
+>>> import bs4
+>>> exampleFile = open('example.html')
+>>> exampleSoup = bs4.BeautifulSoup(exampleFile.read(), 'html.parser')
+>>> elems = exampleSoup.select('#author')
+>>> type(elems)                   # elems Список обьектов Tag
+<class 'bs4.element.ResultSet'>
+>>> len(elems)
+1
+>>> type(elems[0])
+<class 'bs4.element.Tag'>
+>>> str(elems[0])                 # Преобразование обьекта Tag в строку
+'<span id="author">Al Sweigart</span>'
+>>> elems[0].getText()            # Этот метод показывает содерж. текст 
+'Al Sweigart'
+>>> elems[0].attrs
+{'id': 'author'}
+
+Извлекаем все элементы <p>
+>>> pElems = exampleSoup.select('p')
+>>> str(pElems[0])
+'<p>Download my <strong>Python</strong> book from <a href="http://inventwithpython.com">my website</a>.</p>'
+>>> pElems[0].getText()
+'Download my Python book from my website.'
+>>> str(pElems[1])
+'<p class="slogan">Learn Python the easy way!</p>'
+>>> pElems[1].getText()
+'Learn Python the easy way!'
+>>> str(pElems[2])
+'<p>By <span id="author">Al Sweigart</span></p>'
+>>> pElems[2].getText()
+'By Al Sweigart'
+
+
+
+================= Получение данных из атрибутов элемента ===============
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
