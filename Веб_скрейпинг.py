@@ -199,16 +199,58 @@ soup.select('input[type="button"]')
 
 
 
-================= Получение данных из атрибутов элемента ===============
+================= Получение данных из атрибутов элемента .get() ==============================
+
+Используем метод select() для нахождения элемнтов <span> и сохранения первого из них
+в переменной spanElem. Передав методу get() имя атрибута 'id' получаем соотв. значение 'author'
+
+>>> import bs4
+>>> soup = bs4.BeautifulSoup(open('example.html'), 'html.parser')
+>>> spanElem = soup.select('span')[0]
+>>> str(spanElem)
+'<span id="author">Al Sweigart</span>'
+>>> spanElem.get('id')           # Метод get() обьекта Tag
+'author'
+>>> spanElem.get('несуществующий_адрес')== None
+True
+>>> spanElem.attrs
+{'id': 'author'}
 
 
 
+================= Открытие всех результатов поиска searchpypi.py ========================
 
+#! python3
+# searchpypi.py - открывает несколько результатов поиска
 
+import requests, sys, webbrowser, bs4
+print('Поиск...') # Отображается при загрузке страницы результатов поиска
+res = requests.get('https://pypi.org/search/?q=' + ' '.join(sys.argv[1:]))
+res.raise_for_status()
 
+# Извлечение первых найденных ссылок
+soup = bs4.BeautifulSoup(res.text, 'html.parser')
 
+# Открытие отдельной вкладки для каждого результата
+# После исследования через инструменты разработчика
+linkElems = soup.select('.package-snippet')
 
+numOpen = min(5, len(linkElems)) # Меньшее из переданных ей чисел(кол-во ссылок)
+for i in range(numOpen):
+    urlToOpen = 'https://pypi.org' + linkElems[i].get('href')
+    print('Открытие ', urlToOpen)
+    webbrowser.open(urlToOpen)
 
+'''В результате открывается 5 вкладок браузера
+
+C:\Users\ArtyomLe>searchpypi.py boring stuff
+Поиск...
+Открытие  https://pypi.org/project/boring/
+Открытие  https://pypi.org/project/stuff/
+Открытие  https://pypi.org/project/boring-logger/
+Открытие  https://pypi.org/project/automateboringstuff2ndedition/
+Открытие  https://pypi.org/project/automateboringstuff/
+'''
 
 
 
