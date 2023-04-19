@@ -253,6 +253,69 @@ C:\Users\ArtyomLe>searchpypi.py boring stuff
 '''
 
 
+================= Загрузка картинок из сайта xkcd.com (downloadXkcd.py) ========================
+
+
+#! python3
+# downloadXkcd.py - загружает все комиксы XKCD
+
+import requests, os, bs4
+
+url = 'https://xkcd.com'  # Начальный URL-адрес
+os.makedirs('xkcd', exist_ok=True) # Сохраняем комикс в папке ./xkcd
+                                   # exist_ok=True Предотвращает появление исключения в том случае если папка существует
+while not url.endswith('#'):       # Последняя картинка на сайте заканчивается # 
+    # Загрузка страницы
+    print('Загружаемая страница %s...' % url)
+    res = requests.get(url)
+    res.raise_for_status()
+
+    soup = bs4.BeautifulSoup(res.text, 'html.parser')
+
+    # Поиск URL-адреса изображения комикса
+    comicElem = soup.select('#comic img')
+    if comicElem == []:
+        print('Не удалось найти изображение комикса.')
+    else:
+        comicUrl = 'https:' + comicElem[0].get('src')
+        
+        # Загрузить изображение
+        print('Загружается изображение %s...' % (comicUrl))
+        res = requests.get(comicUrl)
+        res.raise_for_status()
+
+        # Сохранение изображения в папке ./xkcd
+        imageFile = open(os.path.join('xkcd', os.path.basename(comicUrl)), 'wb')
+        for chunk in res.iter_content(100000):
+            imageFile.write(chunk)
+        imageFile.close()
+    # Получение URL-адреса кнопки Prev
+    prevLink = soup.select('a[rel="prev"]')[0]
+    url = 'https://xkcd.com' + prevLink.get('href')
+
+print('Готово!')
+
+
+
+================= Запуск браузера под управлением модуля Selenium ========================
+
+pip install --user selenium
+
+>>> from selenium import webdriver
+>>> browser = webdriver.Chrome()
+>>> type(browser)
+<class 'selenium.webdriver.chrome.webdriver.WebDriver'>
+>>> browser.get('https://inventwithpython.com')
+
+
+
+
+
+
+
+
+
+
 
 
 
