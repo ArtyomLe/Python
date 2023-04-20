@@ -308,17 +308,62 @@ pip install --user selenium
 >>> browser.get('https://inventwithpython.com')
 
 
+Методы обьекта WebDriver для поиска элементов
+---------------------------------------------------------------------------------
+Имя метода                                       |  Возвращаемый обьект WebElement
+---------------------------------------------------------------------------------
+browser.find_element_by_name(имя)                  Элементы содержащие атрибут
+browser.find_elements_by_name(имя)                 с указанным именем
+ 
+browser.find_element_by_class_name(имя)            Элементы использующие CSS класс
+browser.find_elements_by_class_name(имя)           с указанным именем
+
+browser.find_element_by_css_selector(селектор)     Элементы соответствующие указанному
+browser.find_elements_by_css_selector(селектор)    селектору CSS
+
+browser.find_element_by_id(id)                     Элементы с указанным идентификатором
+browser.find_elements_by_id(id)
+
+browser.find_element_by_link_text(текст)           Элементы <a> полностью совпадающие 
+browser.find_elements_by_link_text(текст)          с указаным текстом
+
+browser.find_element_by_partial_link_text(текст)   Элементы <a> содержащие указанный
+browser.find_elements_by_partial_link_text(текст)  текст
+
+browser.find_element_by_tag_name(имя)              Элементы с указанным именем тега
+browser.find_elements_by_tag_name(имя)             без учёта регистра (<a> == 'a' & 'A')
 
 
 
 
+Атрибуты и методы обьекта WebElement
+---------------------------------------------------------------------------------
+Атрибут или метод  |  Описание
+---------------------------------------------------------------------------------
+tag_name            Имя тега, например 'a' в случае элемента <a>
+get_attribute(имя)  Значение атрибута с указанным именем для данного элемента 
+text                Текст, содержащийся в элементе, например 'hello' в случае элемента <span>hello</span>
+clear()             В случае текстового поля или текстовой области удаляет введённый тест
+is_displayed()      Возвращает True если элемент видимый, в противном случае False
+is_enabled()        Для элементов ввода возвращает True, если элемент активизирован, иначе False
+is_selected()       Для флажков или переключателей воозвращает True, если элемент выбран.Иначе False
+location            Словарь с ключами 'x' и 'y' для позиции элемента на веб-странице
 
 
 
 
+from selenium import webdriver
+browser = webdriver.Chrome()
+browser.get('https://inventwithpython.com')
+try:
+    elem = browser.find_element_by_class_name('bookcover')
+    print('Найден элемент <%s> с данным именем класса!' %(elem.tag_name))
+
+except:
+    print('Не удалось найти элемент с данным именем класса.')
 
 
 
-
+================= Щелчок на веб-странице  =============================================
 
 
