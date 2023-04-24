@@ -228,15 +228,44 @@ wb.save('example_copy.xlsx')    # Сохраняем новую рабочую �
  
 
 
-==================== Сохранение и удаление рабочих листов ======================
+Сохранение и удаление рабочих листов:
+-------------------------------------
+create_sheet() remove_sheet()
+
+import openpyxl
+wb = openpyxl.Workbook()
+wb.sheetnames
+['Sheet']
+wb.create_sheet()       # Добавление нового рабочего листа
+<Worksheet "Sheet1">    
+wb.sheetnames           # Просмотр рабочих листов
+['Sheet', 'Sheet1']
+wb.create_sheet(index=0, title='First Page') # Добавление нового рабочего листа
+<Worksheet "First Page">
+wb.sheetnames
+['First Page', 'Sheet', 'Sheet1']
+wb.create_sheet(index=2, title='Middle list')
+<Worksheet "Middle list">
+wb.sheetnames
+['First Page', 'Sheet', 'Middle list', 'Sheet1']
+del wb['Middle list']     # Удаление рабочего листа
+del wb['Sheet1']
+wb.sheetnames
+['First Page', 'Sheet']
 
 
 
+Запись значений в ячейки:
+--------------------------
+import openpyxl
+wb = openpyxl.Workbook()
+sheet = wb['Sheet']
+sheet['A1'] = 'Hello World!'
+sheet['A1'].value
+'Hello World!'
 
 
-
-
-
+==================== Обновление электронной таблицы ======================
 
 
 
