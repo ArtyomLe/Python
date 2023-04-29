@@ -242,3 +242,59 @@ sheet.updateRows(rows)      # Обновление электронной таб
 Создание и удаление листов:
 ---------------------------
 
+import ezsheets
+ss = ezsheets.createSpreadsheet('Несколько листов')
+ss.sheetTitles
+('Sheet1',)
+ss.createSheet('Beer')
+<Sheet sheetId=30880806, title='Beer', rowCount=1000, columnCount=26>
+ss.createSheet('Steak')
+<Sheet sheetId=320092503, title='Steak', rowCount=1000, columnCount=26>
+ss.
+ss.sheetTitles
+('Sheet1', 'Beer', 'Steak')
+ss.createSheet('Bacon', 0)
+<Sheet sheetId=997551955, title='Bacon', rowCount=1000, columnCount=26>
+ss.sheetTitles
+('Bacon', 'Sheet1', 'Beer', 'Steak')
+
+
+
+***Удаление листов
+
+ss.sheetTitles
+('Bacon', 'Sheet1', 'Beer', 'Steak')
+ss[0].delete()
+
+ss.sheetTitles
+('Sheet1', 'Beer', 'Steak')
+ss['Beer'].delete()
+
+ss.sheetTitles
+('Sheet1', 'Steak')
+
+sheet = ss['Steak']
+sheet.delete()
+
+ss.sheetTitles
+('Sheet1',)
+ss[0].clear()
+
+ss.sheetTitles
+('Sheet1',)
+
+
+
+***Копирование листов
+
+import ezsheets
+ss1 = ezsheets.createSpreadsheet('First spreadsheet')
+ss2 = ezsheets.createSpreadsheet('Second spreadsheet')
+ss1[0]
+<Sheet sheetId=0, title='Sheet1', rowCount=1000, columnCount=26>
+
+ss1[0].updateRow(1, ['Данные', 'в', 'первой', 'строке'])
+ss1[0].copyTo(ss2)
+
+ss2.sheetTitles
+('Sheet1', 'Copy of Sheet1')
